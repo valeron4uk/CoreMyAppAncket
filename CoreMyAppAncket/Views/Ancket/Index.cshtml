@@ -1,0 +1,43 @@
+﻿@model IEnumerable<CoreMyAppAncket.Models.AncketVievModels.Ancket>
+
+@{
+    ViewData["Title"] = "Index";
+    Dictionary<int, int> r = ViewBag.Results;
+}
+
+<br />
+<form >
+    <button asp-action="Edit" asp-controller="Ancket" asp-route-id="@null" class="btn btn-primary" method="get">Create New</button>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-action="ViewAncket" asp-route-id="@item.Id">@item.Name</a>
+                        @*@Html.DisplayFor(modelItem => item.Name)*@
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Results" asp-route-id="@item.Id">results - @r.GetValueOrDefault(key: @item.Id) </a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                        @Html.DisplayFor(model=>item.Date,new { @class="from-control"})|
+                        @Html.ActionLink("Link to Ancket", "AncketEnterData","Ancket", new { id = @item.Id }, null )
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>

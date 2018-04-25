@@ -1,0 +1,76 @@
+﻿@using CoreMyAppAncket.Models.AncketVievModels
+@using PagedList.Core.Mvc;
+@model PagedList.Core.IPagedList<CoreMyAppAncket.Models.AncketVievModels.AncketResult>
+
+@{
+    ViewData["Title"] = "Results";
+    Ancket a = ViewBag.Ancket;
+    // Dictionary<int, List<AncketFormResult>> res = ViewBag.Results;
+}
+
+<h2>@a.Name Results</h2>
+
+<div class="divTable paleBlueRows">
+    <div class="divTableHeading">
+        <div class="divTableRow">
+            <div class="divTableHead">NameForm</div>
+            <div class="divTableHead">Value</div>
+        </div>
+    </div>
+    <div class="divTableBody" id="divTableBody">
+
+        @foreach (var item in Model)
+        {
+
+            @foreach (var it in item.AncketFormResults)
+            {<div class="divTableRow">
+                    <div class="divTableCell">
+                        @{
+                            if (it.FormType.Equals(FormType.Email))
+                            {
+                                <text>Email</text>
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(m => it.NameForm)
+                            }
+                        }
+
+                    </div>
+                    <div class="divTableCell">
+                        @{
+                            if (it.FormType.Equals(FormType.ComboBox) || it.FormType.Equals(FormType.TextArea) || it.FormType.Equals(FormType.TextBoxString))
+                            {
+                                @Html.DisplayFor(m => it.StringData)
+                            }
+                            else if (it.FormType.Equals(FormType.Email))
+                            {
+                                @Html.DisplayFor(m => it.NameForm)
+                            }
+                            else if (it.FormType.Equals(FormType.Phone) || it.FormType.Equals(FormType.TextBoxInt))
+                            {
+                                @Html.DisplayFor(m => it.IntData)
+                            }
+                            else if (it.FormType.Equals(FormType.CheckBox))
+                            {
+                                @Html.DisplayFor(m => it.CheckBoxData)
+                            }
+                        }
+                    </div>
+                </div>
+            }
+
+            <hr />
+        }
+
+    </div>
+
+</div>
+
+<br />
+Страница @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) из @Model.PageCount
+
+<pager class="pager-container" list="@Model" options="@PagedListRenderOptions.TwitterBootstrapPager" asp-action="Results" asp-controller="Ancket" />
+@section Scripts {
+    <link href="~/css/ancket-edit/ancket-edit.css" rel="stylesheet" type="text/css" />
+}

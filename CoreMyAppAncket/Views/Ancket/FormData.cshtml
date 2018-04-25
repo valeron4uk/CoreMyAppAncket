@@ -1,0 +1,53 @@
+﻿@using CoreMyAppAncket.Models.AncketVievModels
+@model KeyValuePair<string, CoreMyAppAncket.Models.AncketVievModels.AncketForm>
+
+@{
+    Layout = null;
+
+}
+
+@{
+    if (Model.Value.FormType.Equals(FormType.TextBoxString))
+    {
+        <div class="divTableCell">
+            @Html.TextBox("AncketForms[" + Model.Key + "].TextBoxStringData", Model.Value.TextBoxStringData, new { @class = "form-control", type = "text" })
+        </div>
+
+    }
+    else if (Model.Value.FormType.Equals(FormType.TextBoxInt))
+    {
+        <div class="divTableCell">
+            @Html.TextBox("AncketForms[" + Model.Key + "].TextBoxIntData", Model.Value.TextBoxIntData, new { @class = "form-control", type = "text" })
+        </div>
+    }
+    else if (Model.Value.FormType.Equals(FormType.TextArea))
+    {
+        <div class="divTableCell">
+            @Html.TextArea("AncketForms[" + Model.Key + "].TextBoxStringData", Model.Value.TextBoxStringData, new { @class = "form-control", type = "text", rows = "3" })
+        </div>
+    }
+    else if (Model.Value.FormType.Equals(FormType.Phone))
+    {
+        <div class="divTableCell">
+            @Html.TextBox("AncketForms[" + Model.Key + "].TextBoxIntData", Model.Value.TextBoxIntData, new { @class = "form-control", type = "text", placeholder = "380501112233" })
+        </div>
+    }
+    else if (Model.Value.FormType.Equals(FormType.Email))
+    {
+        <div class="divTableCell"></div>
+        <div class="divTableCell"></div>
+    }
+    else if (Model.Value.FormType.Equals(FormType.ComboBox))
+    {
+        <div class="divTableCell">
+            @Html.TextBox("AncketForms[" + Model.Key + "].TextBoxStringData", Model.Value.TextBoxStringData, new { @class = "form-control", type = "text" })
+        </div>
+
+    }
+    else if (Model.Value.FormType.Equals(FormType.CheckBox))
+    {
+        <div class="divTableCell">
+            @Html.CheckBox("AncketForms[" + Model.Key + "].CheckBoxData", Model.Value.CheckBoxData, new { @class = "form-check-input" })
+        </div>
+    }
+}

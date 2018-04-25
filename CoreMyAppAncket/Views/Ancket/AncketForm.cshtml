@@ -1,0 +1,31 @@
+﻿@using CoreMyAppAncket.Models.AncketVievModels
+@model KeyValuePair<string, CoreMyAppAncket.Models.AncketVievModels.AncketForm>
+
+@{
+    Layout = null;
+    var key = Model.Key;
+}
+
+<div class="divTableRow" id="FormRow_@key">
+    <div class="divTableCell">
+        @Html.CheckBox("CheckRow", new { @class = "form-check-input", @id = "CheckRow" })
+    </div>
+    <div class="divTableCell" id="divTableCell">
+        @Html.DropDownList("AncketForms[" + Model.Key + "].FormType",
+                                                       new SelectList(Enum.GetValues(typeof(FormType)), Model.Value.FormType), new { @class =  "form-control",  @key = key })
+    </div>
+    <div class="divTableCell">
+        @Html.TextBox("AncketForms[" + Model.Key + "].FormName", Model.Value.FormName, new { @class = "form-control" })
+    </div>
+    <div class="divTableCell" id="Item_@key">
+        @Html.CheckBox("AncketForms[" + Model.Key + "].IsValid", Model.Value.IsValid, new { @class = "form-check-input" })
+    </div>
+    @Html.Partial("FormData", Model)
+</div>
+
+
+
+
+
+
+

@@ -1,0 +1,68 @@
+﻿@using CoreMyAppAncket.Models.AncketVievModels;
+@model CoreMyAppAncket.Models.AncketVievModels.Ancket
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+<hr />
+@using (Html.BeginForm("Edit", "Ancket", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    <fieldset>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-2"><label>Name Ancket</label></div>
+                <div class="col-md-4">
+                    @Html.TextBox("Name", Model.Name, new { @class = "form-control" })
+                    @Html.ValidationMessage("Name")
+                </div>
+                <div class="col-md-3">
+                    
+                    <button asp-action="ViewAncket" asp-controller="Ancket" class="btn btn-primary" asp-route-id="@Model" formtarget="_blank">View</button>                    
+                    <button type="submit" class="btn btn-primary" method="post" name="action" value="save">Save</button>                   
+                    <button asp-action="Index" asp-controller="Ancket" class="btn btn-primary">Cancel</button>                  
+                 </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div type="button" class="btn btn-primary btn-sm" id="AncketForm">Add form</div>
+                    <div type="button" class="btn btn-primary btn-sm" id="remove-line">Remove line</div>
+                    <div type="button" class="btn btn-success btn-sm" id="upbtn">Up</div>
+                    <div type="button" class="btn btn-success btn-sm" id="downbtn">Down</div>
+                </div>
+            </div>
+
+            <div class="divTable paleBlueRows">
+                <div class="divTableHeading">
+                    <div class="divTableRow">
+                        <div class="divTableHead">InitForm</div>
+                        <div class="divTableHead">TypeForm</div>
+                        <div class="divTableHead">NameForm</div>
+                        <div class="divTableHead">IsValid*</div>
+                        <div class="divTableHead">Value</div>
+                    </div>
+                </div>
+                <div class="divTableBody" id="divTableBody">
+                    @foreach (var item in Model.AncketForms)
+                    {                       
+                         @Html.Partial("AncketForm", new KeyValuePair<string, AncketForm>(Guid.NewGuid().ToString("N"), item))                        
+                    }
+                </div>
+            </div>
+        </div>
+        <div>
+            <text>Send form to yor Email?</text>
+            @Html.CheckBox("IsSendMail",Model.IsSendMail,new {@class = "form-check-input" })
+        </div>
+    </fieldset>
+}
+
+
+
+
+@section Scripts {
+    <script type="text/javascript" src="~/js/ancket-edit/ancket-edit.js"></script>
+    <link href="~/css/ancket-edit/ancket-edit.css" rel="stylesheet" type="text/css" />
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

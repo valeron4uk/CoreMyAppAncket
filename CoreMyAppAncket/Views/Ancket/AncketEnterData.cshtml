@@ -1,0 +1,163 @@
+﻿@using CoreMyAppAncket.Models.AncketVievModels
+@using PaulMiami.AspNetCore.Mvc.Recaptcha
+@model CoreMyAppAncket.Models.AncketVievModels.Ancket
+
+@{
+    ViewData["Title"] = "AncketEnterDate";
+}
+
+<h2>@Model.Name</h2>
+<hr />
+
+
+@using (Html.BeginForm("AncketEnterDate", "Ancket", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.HiddenFor(m => Model.Name)
+    @Html.HiddenFor(m => Model.IsSendMail)
+    <div class="divTable paleBlueRows">
+        <div class="divTableHeading">
+            <div class="divTableRow">
+                <div class="divTableHead">NameForm</div>
+                <div class="divTableHead">Value</div>
+            </div>
+        </div>
+        <div class="divTableBody" id="divTableBody">
+
+            @{
+                foreach (var item in Model.AncketForms)
+                {
+                    @Html.Hidden("AncketForms[" + item.Id + "].FormType", item.FormType)
+                    @Html.Hidden("AncketForms[" + item.Id + "].Id", item.Id)                    
+                    <div class="divTableRow">
+
+                        @if (item.FormType.Equals(FormType.CheckBox))
+                        {
+                            @Html.Hidden("AncketForms[" + item.Id + "].FormName", item.FormName)
+                            <div class="divTableCell">
+                                @Html.DisplayFor(m => item.FormName)
+                            </div>
+                            <div class="divTableCell">
+                                @Html.CheckBox("AncketForms[" + item.Id + "].CheckBoxData", item.CheckBoxData, new { @class = "form-check-input" })
+                            </div>
+                        }
+                        else if (item.FormType.Equals(FormType.ComboBox))
+                        {
+                            @Html.Hidden("AncketForms[" + item.Id + "].FormName", item.FormName)
+                            <div class="divTableCell">
+                                @Html.DisplayFor(m => item.FormName)
+                            </div>
+                            <div class="divTableCell">
+                                @{ var st = item.TextBoxStringData.Split(";");}
+
+                                @Html.DropDownList("AncketForms[" + item.Id + "].TextBoxStringData", new SelectList(st.ToList()), new { @class = "form-control", @type = "text" })
+                            </div>
+                        }
+                        else if (item.FormType.Equals(FormType.Email))
+                        {                            
+                            <div class="divTableCell">
+                                @Html.DisplayFor(m => item.FormType)
+                            </div>
+                            <div class="divTableCell">
+                                @Html.TextBox("AncketForms[" + item.Id + "].FormName", item.FormName, new { @class = "form-control", @type = "text" })
+                            </div>
+                        }
+                        else if (item.FormType.Equals(FormType.Phone))
+                        {
+                            @Html.Hidden("AncketForms[" + item.Id + "].FormName", item.FormName)
+                            <div class="divTableCell">
+                                @Html.DisplayFor(m => item.FormName)
+                            </div>
+                            <div class="divTableCell">
+                                @Html.TextBox("AncketForms[" + item.Id + "].TextBoxIntData", item.TextBoxIntData, new { @class = "form-control", @placeholder = "380983332211", @type = "text" })
+                            </div>
+                        }
+                        else if (item.FormType.Equals(FormType.TextArea))
+                        {
+                            @Html.Hidden("AncketForms[" + item.Id + "].FormName", item.FormName)
+                            <div class="divTableCell">
+                                @Html.DisplayFor(m => item.FormName)
+                            </div>
+                            <div class="divTableCell">
+                                @Html.TextArea("AncketForms[" + item.Id + "].TextBoxStringData", item.TextBoxStringData, new { @class = "form-control", @type = "text" })
+                            </div>
+                        }
+                        else if (item.FormType.Equals(FormType.TextBoxInt))
+                        {
+                            @Html.Hidden("AncketForms[" + item.Id + "].FormName", item.FormName)
+                            <div class="divTableCell">
+                                @Html.DisplayFor(m => item.FormName)
+                            </div>
+                            <div class="divTableCell">
+                                @Html.TextBox("AncketForms[" + item.Id + "].TextBoxIntData", item.TextBoxIntData, new { @class = "form-control", @type = "number" })
+                            </div>
+                        }
+                        else if (item.FormType.Equals(FormType.TextBoxString))
+                        {
+                            @Html.Hidden("AncketForms[" + item.Id + "].FormName", item.FormName)
+                            <div class="divTableCell">
+                                @Html.DisplayFor(m => item.FormName)
+                            </div>
+                            <div class="divTableCell">
+                                @Html.TextBox("AncketForms[" + item.Id + "].TextBoxStringData", item.TextBoxStringData, new { @class = "form-control", @type = "text" })
+                            </div>
+                        }
+                    </div>
+                }
+
+            }
+
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="g-recaptcha" data-sitekey="@ViewData["ReCaptchaKey"]" data-callback="enableBtn"></div>
+            </div>
+            <div class="col - md - 2">
+                <br />
+                <input id="savebtn" type="button" class="btn btn-primary btn-lg" method="post" name="action" value="Submit">
+            </div>
+        </div>
+    </div>
+
+}
+
+
+@section Scripts {
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <link href="~/css/ancket-edit/ancket-edit.css" rel="stylesheet" type="text/css" />
+    <script>
+        $(document).ready(function () {
+            $("#savebtn").on("click", function (e) {
+                var recaptcha = $("#g-recaptcha-response").val();
+                if (recaptcha === "") {
+                    alert("Please check the recaptcha");
+                } else {
+                    $.ajax({
+                        async: false,
+                        url: "/Ancket/Verify",
+                        method: "GET",
+                        data: { "gRecaptchaResponse": recaptcha },
+
+                        success: function (response) {
+                            if (response === true) {
+                                $("form").submit();
+                            } else {
+                                alert("captcha verification NOT successful \n" + JSON.stringify(response));
+                                e.preventDefault();
+                                return false;
+                            }
+                        },
+
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert("captcha verification NOT successful");
+                            e.preventDefault();
+                            return false;
+                        }
+                    });
+                }
+            });
+        });
+
+    </script>
+}

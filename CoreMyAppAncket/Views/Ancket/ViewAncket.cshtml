@@ -1,0 +1,100 @@
+﻿@using CoreMyAppAncket.Models.AncketVievModels;
+@model CoreMyAppAncket.Models.AncketVievModels.Ancket
+
+@{
+    ViewData["Title"] = "ViewAncket";
+}
+
+<h2>@Html.DisplayFor(model => model.Name)</h2>
+
+
+<div class="divTable paleBlueRows">
+    <div class="divTableHeading">
+        <div class="divTableRow">
+            <div class="divTableHead">NameForm</div>
+            <div class="divTableHead">Value</div>
+        </div>
+    </div>
+    <div class="divTableBody" id="divTableBody">
+
+        @foreach (var item in Model.AncketForms)
+        {<div class="divTableRow">
+
+                @if (item.FormType.Equals(FormType.CheckBox))
+                {
+                <div class="divTableCell">
+                    @Html.DisplayFor(model => item.FormName)
+                </div>
+                <div class="divTableCell">
+                    @Html.DisplayFor(model => item.CheckBoxData)
+                </div>
+                }
+                else if (item.FormType.Equals(FormType.ComboBox))
+                {
+                <div class="divTableCell">
+                    @Html.DisplayFor(model => item.FormName)
+                </div>
+                <div class="divTableCell">
+                    @{ var st = item.TextBoxStringData.Split(";");}                       
+
+                    @Html.DropDownList("TextBoxStringData", new SelectList(st.ToList()), new { @class = "form-control", @type = "text" })
+                </div>
+
+                }
+                else if (item.FormType.Equals(FormType.Email))
+                {
+                <div class="divTableCell">
+                    @Html.DisplayFor(model => item.FormType)
+                </div>
+
+                <div class="divTableCell">
+                    @Html.DisplayFor(model => item.FormName)
+                </div>
+                }
+                else if (item.FormType.Equals(FormType.Phone))
+                {
+                <div class="divTableCell">
+                    @Html.DisplayFor(model => item.FormName)
+                </div>
+                <div class="divTableCell">
+                    @Html.DisplayFor(model => item.TextBoxIntData)
+                </div>
+                }
+                else if (item.FormType.Equals(FormType.TextArea))
+                {
+                <div class="divTableCell">
+                    @Html.DisplayFor(model => item.FormName)
+                </div>
+                <div class="divTableCell">
+                    @Html.TextAreaFor(model => item.TextBoxStringData,new {@class="form-control" })
+                </div>
+                }
+                else if (item.FormType.Equals(FormType.TextBoxInt))
+                {
+                <div class="divTableCell">
+                    @Html.DisplayFor(model => item.FormName)
+                </div>
+                <div class="divTableCell">
+                    @Html.DisplayTextFor(model => item.TextBoxIntData)
+                </div>
+                }
+                else if (item.FormType.Equals(FormType.TextBoxString))
+                {
+                <div class="divTableCell">
+                    @Html.DisplayFor(model => item.FormName)
+                </div>
+                <div class="divTableCell">
+                    @Html.DisplayTextFor(model => item.TextBoxStringData)
+                </div>
+                }
+            </div>
+        }
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+    <link href="~/css/ancket-edit/ancket-edit.css" rel="stylesheet" type="text/css" />
+}
